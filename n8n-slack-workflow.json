@@ -1,0 +1,80 @@
+{
+  "name": "GitHub Test Results to Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "github-test-webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.status }}",
+              "value2": "failure"
+            }
+          ]
+        }
+      },
+      "id": "if-node",
+      "name": "IF Test Failed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "channel": "#tests",
+        "text": "❌ **Tests Failed** on `{{$json.branch}}`\n\n📊 **Results:**\n• Total: {{$json.test_results.total}}\n• Passed: {{$json.test_results.passed}}\n• Failed: {{$json.test_results.failed}}\n• Duration: {{$json.test_results.duration_seconds}}s\n\n🔗 **View:** {{$json.workflow_url}}\n\n👤 **Author:** {{$json.author}}\n📝 **Commit:** {{$json.commit}}",
+        "attachments": [],
+        "otherOptions": {}
+      },
+      "id": "slack-node",
+      "name": "Slack Notification",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "credentials": {
+        "slackApi": {
+          "id": "your-slack-credential-id",
+          "name": "Slack API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "IF Test Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Test Failed": {
+      "main": [
+        [
+          {
+            "node": "Slack Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null
+}
