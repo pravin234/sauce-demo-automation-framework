@@ -4,7 +4,7 @@
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "github-test-webhook",
+        "path": "b84bfdb1-b500-4f83-8b84-c989bc3e69b3",
         "responseMode": "responseNode",
         "options": {}
       },
