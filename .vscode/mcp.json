@@ -3,10 +3,14 @@
     "playwright-test": {
       "type": "stdio",
       "command": "npx",
-      "args": [
-        "playwright",
-        "run-test-mcp-server"
-      ]
+      "args": ["playwright", "run-test-mcp-server"]
+    },
+    "n8n-mcp": {
+      "type": "http",
+      "url": "https://pravinkadam234.app.n8n.cloud/mcp-server/http",
+      "headers": {
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlOGE3ZmQ3MS05MDkwLTRmYWEtYjZiOS01ZDAwMTA4OGNhZmEiLCJpc3MiOiJuOG4iLCJhdWQiOiJtY3Atc2VydmVyLWFwaSIsImp0aSI6IjIxYjJmZWM1LTg5NzgtNDUzMS04MTQ1LTkzZTIzNWE4ZWZlYiIsImlhdCI6MTc3NTMyODY1NH0.6E4PTtS9OAJC_RFwnumlrGsNQEn64JWb2drNZ_GLGt0"
+      }
     }
   },
   "inputs": []
