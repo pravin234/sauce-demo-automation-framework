@@ -1,0 +1,19 @@
+{
+  "name": "sauce-demo-playwright-framework",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:report": "npm test && npm run report",
+    "test:headed:report": "npm run test:headed && npm run report",
+    "report": "npx playwright show-report",
+    "planner": "ts-node scripts/aiTestGenerator.ts planner",
+    "healer": "ts-node scripts/aiTestGenerator.ts healer"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.5.2",
+    "typescript": "^5.0.0"
+  }
+}

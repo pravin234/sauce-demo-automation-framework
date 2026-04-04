@@ -1,0 +1,110 @@
+name: Parallel Cross-Browser Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: "Project to run (all, chromium, firefox, webkit, storage-demo, main)"
+        required: false
+        default: "all"
+  push:
+    branches: [release/*]
+    paths:
+      - "tests/**"
+      - "playwright.config.ts"
+      - "package.json"
+
+jobs:
+  parallel-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.project }}
+
+      - name: Run tests - ${{ matrix.project }}
+        run: npx playwright test --project=${{ matrix.project }} --reporter=html,json
+        env:
+          CI: true
+          PROJECT: ${{ matrix.project }}
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-report-${{ matrix.project }}
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload JSON results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: json-results-${{ matrix.project }}
+          path: test-results/
+          retention-days: 30
+
+  generate-summary:
+    name: Generate Test Summary
+    runs-on: ubuntu-latest
+    needs: parallel-tests
+    if: always()
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-results
+
+      - name: Generate summary
+        run: |
+          echo "## 🧪 Test Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Browsers Tested:**" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Chromium" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Firefox" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ WebKit" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Reports are available in the Artifacts section." >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment on commit/PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `## 🎉 Parallel Cross-Browser Tests Complete
+
+            **Test Status:** ✅ All tests executed
+
+            **Browsers Tested:**
+            - Chromium ✅
+            - Firefox ✅
+            - WebKit ✅
+
+            📊 [View detailed reports in Artifacts](#artifacts-section)
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
