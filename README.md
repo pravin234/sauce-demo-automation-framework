@@ -92,9 +92,8 @@ This project demonstrates **real-world SDET/QA Automation skills**:
 
 ---
 
-## 🏗️ Project Structure
-
 ```
+🏗️ Project Structure
 📦 sauce-demo-automation-framework
 ├── tests/
 │   ├── page-objects/
@@ -106,8 +105,6 @@ This project demonstrates **real-world SDET/QA Automation skills**:
 ├── dashboard/
 ├── playwright.config.ts
 └── package.json
-```
-
 ---
 
 ## 🚀 Quick Start
