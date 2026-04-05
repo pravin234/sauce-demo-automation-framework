@@ -14,6 +14,9 @@ on:
       - "playwright.config.ts"
       - "package.json"
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   parallel-tests:
     runs-on: ubuntu-latest

@@ -25,7 +25,7 @@ const config: PlaywrightTestConfig = {
   ],
   projects: [
     {
-      name: "Chrome",
+      name: "chromium",
       ...baseProject,
       use: {
         ...baseProject.use,
@@ -33,7 +33,7 @@ const config: PlaywrightTestConfig = {
       },
     },
     {
-      name: "Firefox",
+      name: "firefox",
       ...baseProject,
       use: {
         ...baseProject.use,
@@ -41,7 +41,7 @@ const config: PlaywrightTestConfig = {
       },
     },
     {
-      name: "WebKit",
+      name: "webkit",
       ...baseProject,
       use: {
         ...baseProject.use,
