@@ -51,18 +51,9 @@ This project demonstrates **real-world SDET/QA Automation skills**:
 ---
 
 ## 🧠 Architecture Overview
+<img width="2705" height="526" alt="mermaid-diagram" src="https://github.com/user-attachments/assets/552031f6-3038-49d7-a28f-540545bc8946" />
 
-```mermaid
-flowchart LR
-    A[Test Specs] --> B[Page Objects]
-    B --> C[Playwright Engine]
-    C --> D[Browsers]
-    C --> E[Storage State]
-    C --> F[Reports]
 
-    F --> G[GitHub Actions]
-    G --> H[n8n]
-    H --> I[Notifications]
 ```
 
 ---
